@@ -1,12 +1,12 @@
 import React from 'react';
 import ShorcutsContainer from "./components/ShorcutsContainer";
-import AccountBalance from "./components/AccountBalance";
+import BalanceContainer from "./components/BalanceContainer";
 
 function App() {
   return (
     <div className={"container"}>
         <ShorcutsContainer/>
-        <AccountBalance/>
+        <BalanceContainer/>
     </div>
   );
 }
