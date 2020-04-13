@@ -1,0 +1,120 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: url("./996640.jpg");
+  background-size: 100vw 100vh;
+  font-family: Roboto, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.shortcuts-container {
+  width: 50%;
+  position: absolute;
+}
+
+.shortcuts-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.shortcut-button {
+  border-radius: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  box-shadow: 0 0 30px #000
+}
+
+.account-balance {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  color: #37517e;
+
+  padding: 6px 8px 35px 8px;
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 5vh;
+
+  .currency-flag {
+    height: 22px !important;
+    width: 33px !important;
+    margin-right: 6px;
+    position: relative;
+    top: 3px;
+    display: inline-block;
+  }
+
+  p {
+    display: inline-block;
+  }
+
+  h2 {
+    color: #37517e;
+    display: inline-block;
+    font-size: 22px;
+  }
+
+  img {
+    height: 22px;
+    display: inline-block;
+  }
+
+  .refresh-icon {
+    position: relative;
+    top: 5px;
+  }
+
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.15);
+}
+
+.balance-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: auto;
+  margin-bottom: 5vh;
+}
+
+
+.refresh-button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  top: 3px;
+}
+
+
+@keyframes spin{
+  to { transform: rotate(360deg) }
+}
+
+.refresh-button {
+  border: none;
+  background-color: transparent;
+  outline: 0;
+
+
+  .spin-animation{
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+  }
+}
+
