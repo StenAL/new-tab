@@ -4,11 +4,25 @@ import CurrencyBalance from "./CurrencyBalance";
 
 export default function BalanceContainer() {
     const token = process.env.REACT_APP_TRANSFERWISE_API_TOKEN;
-    const profileId = process.env.REACT_APP_TRANSFERWISE_PROFILE_ID;
 
     const [balance, setBalance] = React.useState({balances: []});
 
+    const fetchProfileId = async () => {
+        console.log("fetching TW profile id")
+        const profileIdResponse = await fetch(process.env.REACT_APP_TRANSFERWISE_API_URL + `/v1/profiles`,
+            {headers: {'Authorization': `Bearer ${token}`}});
+        const profileArray = await profileIdResponse.json();
+        const profileId = profileArray[0].id
+        window.localStorage.setItem('transferwiseProfileId', profileId);
+        return profileId;
+    }
+
     const fetchBalance = async () => {
+        let profileId = window.localStorage.getItem('transferwiseProfileId')
+        if (!profileId) {
+            profileId = await fetchProfileId();
+        }
+
         console.log("fetching TW balance")
         const balanceResponse = await fetch(process.env.REACT_APP_TRANSFERWISE_API_URL + `/v1/borderless-accounts?profileId=${profileId}`,
             {headers: {'Authorization': `Bearer ${token}`}});
