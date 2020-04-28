@@ -1,6 +1,6 @@
 # new-tab
 ```
-A custom new-tab page made in React.
+A custom new-tab page.
 ```
 Minimalistic, cool, lightweight. Customizable and extendable. Integrated with the
 TransferWise API to show your current borderless account balance.

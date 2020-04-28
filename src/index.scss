@@ -109,5 +109,9 @@ body {
     animation-duration: 1s;
     animation-timing-function: ease;
   }
+
+  &:focus {
+    outline: none;
+  }
 }
 
