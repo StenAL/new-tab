@@ -34,19 +34,36 @@ export default function BalanceContainer() {
         setBalance(b);
     }
 
+    const reuseExistingBalance = () => {
+        const existingBalance = JSON.parse(localStorage.getItem('balance'));
+        if (existingBalance !== null) {
+            setBalance(existingBalance)
+        } else {
+            console.log('Trying to reuse existing balance failed, balance not found.')
+        }
+    }
+
     const fetchAfterTime = new Date(new Date() - 5 * 60 * 1000); // five minutes ago
     const balanceFetchTime = Date.parse(window.localStorage.getItem('balanceFetchTime'))
 
     if (isNaN(balanceFetchTime) || fetchAfterTime > balanceFetchTime) {
-        fetchBalance().catch(console.log);
-    } else if (Object.keys(balance).length === 1) {
-        setBalance(JSON.parse(localStorage.getItem('balance')));
+        fetchBalance()
+            .catch(e => {
+                console.log(e);
+                reuseExistingBalance();
+            });
+    } else if (Object.keys(balance).length === 1) { // balance has not been initialzed yet
+        reuseExistingBalance()
     }
 
     const refreshBalance = (event) => {
         const target = event.target;
         target.classList.add('spin-animation')
-        fetchBalance().catch(console.log)
+        fetchBalance()
+            .catch(e => {
+                console.log(e);
+                reuseExistingBalance();
+            });
         setTimeout(() => target.classList.remove('spin-animation'), 1000)
     }
 
