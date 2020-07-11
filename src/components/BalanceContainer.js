@@ -76,8 +76,11 @@ export default function BalanceContainer() {
                 <img src={process.env.PUBLIC_URL + "/transferwise.png"} alt={'TransferWise'} className={'transferwise-icon'}/>
                 <h2>
                     Current Balance
-                    <button className={'refresh-button'} onClick={refreshBalance}>
+                    <button className={'balance-container-button'} onClick={refreshBalance}>
                         <img src={process.env.PUBLIC_URL + "/refresh.png"} alt={'refresh'} className={'refresh-icon'}/>
+                    </button>
+                    <button className={'balance-container-button'} onClick={toggleSettingsModal}>
+                        <img src={process.env.PUBLIC_URL + "/settings.png"} alt={'settings'} className={'settings-icon'}/>
                     </button>
                 </h2>
                 {currencyBalances}

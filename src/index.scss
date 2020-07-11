@@ -89,6 +89,14 @@ body {
       padding-left: 3px;
     }
 
+    .settings-icon {
+      filter: brightness(78%);
+      position: relative;
+      margin-left: 6px;
+      width: 20px;
+      height: 20px;
+    }
+
     h2 {
       color: #37517e;
       font-size: 22px;
@@ -105,7 +113,7 @@ body {
   }
 }
 
-.refresh-button {
+.balance-container-button {
   border: none;
   background-color: transparent;
   cursor: pointer;
