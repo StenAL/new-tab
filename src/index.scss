@@ -71,7 +71,7 @@ body {
     margin-left: 5vh;
     margin-bottom: 5vh;
 
-    .currency-flag {
+    .balance-flag {
       height: 22px !important;
       width: 33px !important;
       margin-right: 6px;
@@ -132,6 +132,21 @@ body {
 
   &:focus {
     outline: none;
+  }
+}
+
+.currency-filter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .settings-flag {
+    height: 28px !important;
+    width: 42px !important;
+    margin-right: 6px;
+    position: relative;
+    top: 3px;
+    display: inline-block;
   }
 }
 

@@ -15,7 +15,7 @@ export default function CurrencyBalance({currency, value}) {
 
     return(
         <div key={currency} className={"currency-balance"}>
-            <div className={`currency-flag currency-flag-${currency.toLowerCase()}`}/>
+            <div className={`currency-flag balance-flag currency-flag-${currency.toLowerCase()}`}/>
             <p>{getFormattedValueForCurrency(currency, value)}</p>
         </div>)
 }
