@@ -4,6 +4,8 @@ import CurrencyBalance from "./CurrencyBalance";
 import Modal from 'react-modal';
 import SettingsModal from "./SettingsModal";
 
+Modal.setAppElement('#root');
+
 export default function BalanceContainer() {
     const token = process.env.REACT_APP_TRANSFERWISE_API_TOKEN;
     const apiUrl = process.env.REACT_APP_TRANSFERWISE_API_URL || "https://api.transferwise.com";
@@ -120,7 +122,7 @@ export default function BalanceContainer() {
                 <Modal isOpen={modalOpen} style={{
                     overlay: {
                         position: 'fixed',
-                        top: '52vh',
+                        top: '49vh',
                         left: '16vw',
                         right: '73vw',
                         bottom: '20vh',

@@ -5,12 +5,16 @@ export default function SettingsModal({balances, displayedBalances, onCheckboxTo
     const balanceFilters = balances
         .map(b =>
             <div key={b.currency} className={"currency-filter"}>
-                <div className={`currency-flag settings-flag currency-flag-${b.currency.toLowerCase()}`}/>
-                <input type={'checkbox'} onClick={() => onCheckboxToggle(b.currency)} checked={displayedBalances.includes(b.currency)}/>
+                <div>
+                    <div className={`currency-flag settings-flag currency-flag-${b.currency.toLowerCase()}`}/>
+                    {b.currency}
+                </div>
+                <input type={'checkbox'} onChange={() => onCheckboxToggle(b.currency)} checked={displayedBalances.includes(b.currency)}/>
             </div>)
 
     return (
         <div>
+            <h3>Select balances</h3>
             {balanceFilters}
         </div>
     )

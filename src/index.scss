@@ -139,14 +139,25 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  text-align: left;
+  font-size: 16px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid black;
 
-  .settings-flag {
-    height: 28px !important;
-    width: 42px !important;
-    margin-right: 6px;
+  div {
+    .settings-flag {
+      height: 28px !important;
+      width: 42px !important;
+      margin-right: 6px;
+      position: relative;
+      top: 6px;
+      display: inline-block;
+    }
+  }
+
+  input {
     position: relative;
-    top: 3px;
-    display: inline-block;
+    top: 12px;
   }
 }
 

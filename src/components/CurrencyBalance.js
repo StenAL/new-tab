@@ -8,6 +8,8 @@ export default function CurrencyBalance({currency, value}) {
                 return decimalFormattedValue + " €";
             case 'GBP':
                 return "£" + decimalFormattedValue;
+            case 'USD':
+                return "$" + decimalFormattedValue;
             default:
                 return decimalFormattedValue + " " + currency;
         }
