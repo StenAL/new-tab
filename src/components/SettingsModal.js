@@ -14,7 +14,7 @@ export default function SettingsModal({balances, displayedBalances, onCheckboxTo
 
     return (
         <div>
-            <h3>Select balances</h3>
+            <h3 className={"settings-title"}>Select balances</h3>
             {balanceFilters}
         </div>
     )

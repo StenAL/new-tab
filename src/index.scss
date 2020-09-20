@@ -141,8 +141,8 @@ body {
   justify-content: space-between;
   text-align: left;
   font-size: 16px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid black;
+  padding-bottom: 5px;
+  border-bottom: 1px solid dimgrey;
 
   div {
     .settings-flag {
@@ -157,7 +157,11 @@ body {
 
   input {
     position: relative;
-    top: 12px;
+    top: 4px;
   }
+}
+
+.settings-title {
+  color: #37517e;
 }
 
