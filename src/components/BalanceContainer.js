@@ -8,6 +8,11 @@ Modal.setAppElement("#root");
 
 export default function BalanceContainer() {
     const token = process.env.REACT_APP_TRANSFERWISE_API_TOKEN;
+    if (!token) {
+        console.error(
+            "No TransferWise API token found. Add an .env file or set REACT_APP_TRANSFERWISE_API_TOKEN if it exists"
+        );
+    }
     const apiUrl =
         process.env.REACT_APP_TRANSFERWISE_API_URL ||
         "https://api.transferwise.com";

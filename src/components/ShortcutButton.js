@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ShortcutButton({name, url}) {
+export default function ShortcutButton({ name, url }) {
     return (
         <a
             className={"shortcut-button"}
