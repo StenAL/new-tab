@@ -11,7 +11,7 @@ export default function SettingsModal({
                 <div
                     className={`currency-flag settings-flag currency-flag-${b.currency.toLowerCase()}`}
                 />
-                {b.currency}
+                <span className={"filter-text"}>{b.currency}</span>
             </div>
             <input
                 type={"checkbox"}
