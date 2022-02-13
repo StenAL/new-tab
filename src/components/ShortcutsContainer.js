@@ -1,7 +1,7 @@
 import React from "react";
 import ShortcutButton from "./ShortcutButton";
 
-export default function ShorcutsContainer() {
+export default function ShortcutsContainer() {
     return (
         <div className={"shortcuts-container"}>
             <div className={"shortcuts-row"}>
