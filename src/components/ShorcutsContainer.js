@@ -13,11 +13,11 @@ export default function ShorcutsContainer() {
                     name={"bloomberg"}
                     url={"https://www.bloomberg.com/europe"}
                 />
-                <ShortcutButton name={"delfi"} url={"https://www.delfi.ee/"} />
-                <ShortcutButton name={"github"} url={"https://github.com/"} />
+                <ShortcutButton name={"err"} url={"https://www.errs.ee/"}/>
+                <ShortcutButton name={"github"} url={"https://github.com/"}/>
                 <ShortcutButton
-                    name={"outlook"}
-                    url={"https://outlook.office.com/mail/inbox"}
+                    name={"hckr-news"}
+                    url={"https://hckrnews.com/"}
                 />
             </div>
             <div className={"shortcuts-row"}>
