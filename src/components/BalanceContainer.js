@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useCallback, useEffect} from "react";
 import "currency-flags/dist/currency-flags.css";
 import CurrencyBalance from "./CurrencyBalance";
 import Modal from "react-modal";
@@ -23,7 +23,7 @@ export default function BalanceContainer() {
         JSON.parse(window.localStorage.getItem("displayedBalances"))
     );
 
-    const fetchProfileId = async () => {
+    const fetchProfileId = useCallback(async () => {
         console.log("Fetching TW profile ID...");
         const profileIdResponse = await fetch(apiUrl + `/v1/profiles`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -33,9 +33,9 @@ export default function BalanceContainer() {
         window.localStorage.setItem("transferwiseProfileId", profileId);
         console.log(`TW profile ID fetched: ${profileId}`);
         return profileId;
-    };
+    }, [apiUrl, token]);
 
-    const fetchBalance = async () => {
+    const fetchBalance = useCallback( async () => {
         let profileId = window.localStorage.getItem("transferwiseProfileId");
         if (!profileId) {
             profileId = await fetchProfileId();
@@ -61,7 +61,7 @@ export default function BalanceContainer() {
         }
         console.log("Balance fetched successfully");
         setBalance(b);
-    };
+    }, [apiUrl, displayedBalances, fetchProfileId, token]);
 
     const reuseExistingBalance = () => {
         const existingBalance = JSON.parse(localStorage.getItem("balance"));
@@ -89,7 +89,7 @@ export default function BalanceContainer() {
             // balance has not been initialized yet
             reuseExistingBalance();
         }
-    }, []);
+    }, [fetchBalance]);
 
     const refreshBalance = (event) => {
         const target = event.target;
