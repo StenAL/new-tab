@@ -5,11 +5,16 @@
     "private": true,
     "dependencies": {
         "currency-flags": "^2.1.2",
-        "node-sass": "^7.0.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-modal": "^3.14.4",
         "react-scripts": "^5.0.0"
+    },
+    "devDependencies": {
+        "husky": "^4.3.0",
+        "lint-staged": "^10.4.0",
+        "prettier": "2.1.2",
+        "sass": "^1.49.7"
     },
     "scripts": {
         "start": "react-scripts start",
@@ -31,11 +36,6 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "devDependencies": {
-        "husky": "^4.3.0",
-        "lint-staged": "^10.4.0",
-        "prettier": "2.1.2"
     },
     "husky": {
         "hooks": {
