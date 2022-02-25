@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout current repository
+        uses: actions/checkout@v2
+
+      - name: set up Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: npm install
+        run: npm ci
+
+      - name: check formatting (Prettier)
+        run: npm run format
+
+      - name: check linting (ESLint)
+        run: npm run lint
+
+      - name: compile TypeScript
+        run: npm run compile
