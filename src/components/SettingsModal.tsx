@@ -1,10 +1,15 @@
-import React from "react";
+import { FunctionComponent } from "react";
 
-export default function SettingsModal({
+interface SettingsModalProps {
+    balances: any;
+    displayedBalances: any;
+    onCheckboxToggle: any;
+}
+export const SettingsModal: FunctionComponent<SettingsModalProps> = ({
     balances,
     displayedBalances,
     onCheckboxToggle,
-}) {
+}) => {
     const balanceFilters = balances.map((b) => (
         <div key={b.currency} className={"currency-filter"}>
             <div>
@@ -27,4 +32,4 @@ export default function SettingsModal({
             {balanceFilters}
         </div>
     );
-}
+};

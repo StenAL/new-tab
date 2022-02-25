@@ -1,6 +1,13 @@
-import React from "react";
+import { FunctionComponent } from "react";
 
-export default function CurrencyBalance({ currency, value }) {
+interface CurrencyBalanceProps {
+    currency: string;
+    value: number;
+}
+export const CurrencyBalance: FunctionComponent<CurrencyBalanceProps> = ({
+    currency,
+    value,
+}) => {
     const getFormattedValueForCurrency = (currency, value) => {
         const decimalFormattedValue = Number(value).toFixed(2);
         switch (currency) {
@@ -23,4 +30,4 @@ export default function CurrencyBalance({ currency, value }) {
             <p>{getFormattedValueForCurrency(currency, value)}</p>
         </div>
     );
-}
+};
