@@ -9,7 +9,9 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "format": "prettier --c src",
-        "format:fix": "prettier -w src"
+        "format:fix": "prettier -w src",
+        "lint": "eslint src",
+        "compile": "tsc"
     },
     "dependencies": {
         "currency-flags": "^2.1.2",
