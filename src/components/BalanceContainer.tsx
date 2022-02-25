@@ -1,10 +1,4 @@
-import {
-    FunctionComponent,
-    useCallback,
-    useEffect,
-    useState,
-    MouseEvent,
-} from "react";
+import { FunctionComponent, useCallback, useEffect, useState, MouseEvent } from "react";
 import "currency-flags/dist/currency-flags.css";
 import { AccountInfo } from "../types";
 import { CurrencyBalance } from "./CurrencyBalance";
@@ -20,9 +14,7 @@ export const BalanceContainer: FunctionComponent = () => {
             "No TransferWise API token found. Add an .env file or set REACT_APP_TRANSFERWISE_API_TOKEN if it exists"
         );
     }
-    const apiUrl =
-        process.env.REACT_APP_TRANSFERWISE_API_URL ||
-        "https://api.transferwise.com";
+    const apiUrl = process.env.REACT_APP_TRANSFERWISE_API_URL || "https://api.transferwise.com";
 
     const [balance, setBalance] = useState<AccountInfo | undefined>();
     const [modalOpen, setModalOpen] = useState(false);
@@ -49,24 +41,17 @@ export const BalanceContainer: FunctionComponent = () => {
         }
 
         console.log("Fetching balance...");
-        const balanceResponse = await fetch(
-            apiUrl + `/v1/borderless-accounts?profileId=${profileId}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const balanceResponse = await fetch(apiUrl + `/v1/borderless-accounts?profileId=${profileId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
         const accountInfoResponse: [AccountInfo] = await balanceResponse.json();
         const accountInfo = accountInfoResponse[0];
         window.localStorage.setItem("balance", JSON.stringify(accountInfo));
-        window.localStorage.setItem(
-            "balanceFetchTime",
-            new Date().getTime().toString()
-        );
+        window.localStorage.setItem("balanceFetchTime", new Date().getTime().toString());
 
         if (displayedBalances.length === 0) {
             const allCurrencies = accountInfo.balances.map((b) => b.currency);
-            window.localStorage.setItem(
-                "displayedBalances",
-                JSON.stringify(allCurrencies)
-            );
+            window.localStorage.setItem("displayedBalances", JSON.stringify(allCurrencies));
             setDisplayedBalances(allCurrencies);
         }
         console.log("Balance fetched successfully");
@@ -74,23 +59,17 @@ export const BalanceContainer: FunctionComponent = () => {
     }, [apiUrl, displayedBalances, fetchProfileId, token]);
 
     const reuseExistingBalance = () => {
-        const existingBalance: AccountInfo = JSON.parse(
-            localStorage.getItem("balance") || "{}"
-        );
+        const existingBalance: AccountInfo = JSON.parse(localStorage.getItem("balance") || "{}");
         if (Object.keys(existingBalance).length !== 0) {
             setBalance(existingBalance);
         } else {
-            console.error(
-                "Trying to reuse existing balance failed, balance not found."
-            );
+            console.error("Trying to reuse existing balance failed, balance not found.");
         }
     };
 
     useEffect(() => {
         const fetchAfterTime = new Date().getTime() - 5 * 60 * 1000; // five minutes ago
-        const balanceFetchTime = Number(
-            window.localStorage.getItem("balanceFetchTime")
-        );
+        const balanceFetchTime = Number(window.localStorage.getItem("balanceFetchTime"));
 
         if (isNaN(balanceFetchTime) || fetchAfterTime > balanceFetchTime) {
             fetchBalance().catch((e) => {
@@ -127,13 +106,7 @@ export const BalanceContainer: FunctionComponent = () => {
 
     const currencyBalances = balance?.balances
         .filter((b) => displayedBalances?.includes(b.currency))
-        .map((b) => (
-            <CurrencyBalance
-                currency={b.currency}
-                value={b.amount.value}
-                key={b.currency}
-            />
-        ));
+        .map((b) => <CurrencyBalance currency={b.currency} value={b.amount.value} key={b.currency} />);
 
     return (
         <div className={"balance-container"}>
@@ -153,10 +126,7 @@ export const BalanceContainer: FunctionComponent = () => {
                             className={"refresh-icon"}
                         />
                     </button>
-                    <button
-                        className={"balance-container-button"}
-                        onClick={() => setModalOpen(!modalOpen)}
-                    >
+                    <button className={"balance-container-button"} onClick={() => setModalOpen(!modalOpen)}>
                         <img
                             src={process.env.PUBLIC_URL + "/settings.png"}
                             alt={"settings"}

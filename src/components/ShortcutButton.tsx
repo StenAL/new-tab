@@ -4,10 +4,8 @@ interface ShortcutButtonProps {
     name: string;
     url: string;
 }
-export const ShortcutButton: FunctionComponent<ShortcutButtonProps> = ({
-    name,
-    url,
-}) => {
+
+export const ShortcutButton: FunctionComponent<ShortcutButtonProps> = ({ name, url }) => {
     return (
         <a
             className={"shortcut-button"}

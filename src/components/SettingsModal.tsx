@@ -14,9 +14,7 @@ export const SettingsModal: FunctionComponent<SettingsModalProps> = ({
     const balanceFilters = balances.map((b) => (
         <div key={b.currency} className={"currency-filter"}>
             <div>
-                <div
-                    className={`currency-flag settings-flag currency-flag-${b.currency.toLowerCase()}`}
-                />
+                <div className={`currency-flag settings-flag currency-flag-${b.currency.toLowerCase()}`} />
                 <span className={"filter-text"}>{b.currency}</span>
             </div>
             <input
