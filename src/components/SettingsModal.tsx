@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useMemo } from "react";
 import { Balance } from "../types";
 
 interface SettingsModalProps {
@@ -11,19 +11,23 @@ export const SettingsModal: FunctionComponent<SettingsModalProps> = ({
     displayedBalances,
     onCheckboxToggle,
 }) => {
-    const balanceFilters = balances.map((b) => (
-        <div key={b.currency} className={"currency-filter"}>
-            <div>
-                <div className={`currency-flag settings-flag currency-flag-${b.currency.toLowerCase()}`} />
-                <span className={"filter-text"}>{b.currency}</span>
-            </div>
-            <input
-                type={"checkbox"}
-                onChange={() => onCheckboxToggle(b.currency)}
-                checked={displayedBalances.includes(b.currency)}
-            />
-        </div>
-    ));
+    const balanceFilters = useMemo(
+        () =>
+            balances.map((b) => (
+                <div key={b.currency} className={"currency-filter"}>
+                    <div>
+                        <div className={`currency-flag settings-flag currency-flag-${b.currency.toLowerCase()}`} />
+                        <span className={"filter-text"}>{b.currency}</span>
+                    </div>
+                    <input
+                        type={"checkbox"}
+                        onChange={() => onCheckboxToggle(b.currency)}
+                        checked={displayedBalances.includes(b.currency)}
+                    />
+                </div>
+            )),
+        [balances, displayedBalances, onCheckboxToggle]
+    );
 
     return (
         <div>
