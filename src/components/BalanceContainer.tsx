@@ -1,12 +1,12 @@
-import React, {useCallback, useEffect} from "react";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import "currency-flags/dist/currency-flags.css";
-import CurrencyBalance from "./CurrencyBalance";
+import { CurrencyBalance } from "./CurrencyBalance";
 import Modal from "react-modal";
-import SettingsModal from "./SettingsModal";
+import { SettingsModal } from "./SettingsModal";
 
 Modal.setAppElement("#root");
 
-export default function BalanceContainer() {
+export const BalanceContainer: FunctionComponent = () => {
     const token = process.env.REACT_APP_TRANSFERWISE_API_TOKEN;
     if (!token) {
         console.error(
@@ -17,9 +17,9 @@ export default function BalanceContainer() {
         process.env.REACT_APP_TRANSFERWISE_API_URL ||
         "https://api.transferwise.com";
 
-    const [balance, setBalance] = React.useState({ balances: [] });
-    const [modalOpen, setModalOpen] = React.useState(false);
-    const [displayedBalances, setDisplayedBalances] = React.useState(
+    const [balance, setBalance] = useState({ balances: [] });
+    const [modalOpen, setModalOpen] = useState(false);
+    const [displayedBalances, setDisplayedBalances] = useState(
         JSON.parse(window.localStorage.getItem("displayedBalances"))
     );
 
@@ -35,7 +35,7 @@ export default function BalanceContainer() {
         return profileId;
     }, [apiUrl, token]);
 
-    const fetchBalance = useCallback( async () => {
+    const fetchBalance = useCallback(async () => {
         let profileId = window.localStorage.getItem("transferwiseProfileId");
         if (!profileId) {
             profileId = await fetchProfileId();
@@ -49,7 +49,10 @@ export default function BalanceContainer() {
         const balanceArray = await balanceResponse.json();
         const b = balanceArray[0];
         window.localStorage.setItem("balance", JSON.stringify(b));
-        window.localStorage.setItem("balanceFetchTime", new Date().toString());
+        window.localStorage.setItem(
+            "balanceFetchTime",
+            new Date().getTime().toString()
+        );
 
         if (displayedBalances === null) {
             const allCurrencies = b.balances.map((b) => b.currency);
@@ -75,8 +78,8 @@ export default function BalanceContainer() {
     };
 
     useEffect(() => {
-        const fetchAfterTime = new Date(new Date() - 5 * 60 * 1000); // five minutes ago
-        const balanceFetchTime = Date.parse(
+        const fetchAfterTime = new Date().getTime() - 5 * 60 * 1000; // five minutes ago
+        const balanceFetchTime = Number(
             window.localStorage.getItem("balanceFetchTime")
         );
 
@@ -185,4 +188,4 @@ export default function BalanceContainer() {
             </div>
         </div>
     );
-}
+};

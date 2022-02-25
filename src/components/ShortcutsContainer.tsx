@@ -1,7 +1,7 @@
-import React from "react";
-import ShortcutButton from "./ShortcutButton";
+import { FunctionComponent } from "react";
+import { ShortcutButton } from "./ShortcutButton";
 
-export default function ShortcutsContainer() {
+export const ShortcutsContainer: FunctionComponent = () => {
     return (
         <div className={"shortcuts-container"}>
             <div className={"shortcuts-row"}>
@@ -13,8 +13,8 @@ export default function ShortcutsContainer() {
                     name={"bloomberg"}
                     url={"https://www.bloomberg.com/europe"}
                 />
-                <ShortcutButton name={"err"} url={"https://www.errs.ee/"}/>
-                <ShortcutButton name={"github"} url={"https://github.com/"}/>
+                <ShortcutButton name={"err"} url={"https://www.errs.ee/"} />
+                <ShortcutButton name={"github"} url={"https://github.com/"} />
                 <ShortcutButton
                     name={"hckr-news"}
                     url={"https://hckrnews.com/"}
@@ -44,4 +44,4 @@ export default function ShortcutsContainer() {
             </div>
         </div>
     );
-}
+};
