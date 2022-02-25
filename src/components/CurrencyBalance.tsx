@@ -4,10 +4,7 @@ interface CurrencyBalanceProps {
     currency: string;
     value: number;
 }
-export const CurrencyBalance: FunctionComponent<CurrencyBalanceProps> = ({
-    currency,
-    value,
-}) => {
+export const CurrencyBalance: FunctionComponent<CurrencyBalanceProps> = ({ currency, value }) => {
     const getFormattedValueForCurrency = (currency: string, value: number) => {
         const decimalFormattedValue = value.toFixed(2);
         switch (currency) {
@@ -24,9 +21,7 @@ export const CurrencyBalance: FunctionComponent<CurrencyBalanceProps> = ({
 
     return (
         <div key={currency} className={"currency-balance"}>
-            <div
-                className={`currency-flag balance-flag currency-flag-${currency.toLowerCase()}`}
-            />
+            <div className={`currency-flag balance-flag currency-flag-${currency.toLowerCase()}`} />
             <p>{getFormattedValueForCurrency(currency, value)}</p>
         </div>
     );
