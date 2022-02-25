@@ -1,6 +1,6 @@
 import { FunctionComponent, useCallback, useEffect, useState, MouseEvent } from "react";
 import "currency-flags/dist/currency-flags.css";
-import { AccountInfo, Profile } from "../types";
+import { Balance, Profile } from "../types";
 import { CurrencyBalance } from "./CurrencyBalance";
 import * as Modal from "react-modal";
 import { SettingsModal } from "./SettingsModal";
@@ -16,7 +16,7 @@ export const BalanceContainer: FunctionComponent = () => {
     }
     const [apiUrl] = useState(process.env.REACT_APP_TRANSFERWISE_API_URL || "https://api.transferwise.com");
 
-    const [accountInfo, setAccountInfo] = useState<AccountInfo | undefined>();
+    const [balances, setBalances] = useState<Balance[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [displayedBalances, setDisplayedBalances] = useState<string[]>(
         JSON.parse(localStorage.getItem("displayedBalances") || "[]")
@@ -24,7 +24,7 @@ export const BalanceContainer: FunctionComponent = () => {
 
     const fetchProfileId = useCallback(async () => {
         console.log("Fetching TransferWise profile ID...");
-        const profileResponse = await fetch(apiUrl + `/v1/profiles`, {
+        const profileResponse = await fetch(`${apiUrl}/v2/profiles`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         const profileResponseArray: Profile[] = await profileResponse.json();
@@ -41,27 +41,26 @@ export const BalanceContainer: FunctionComponent = () => {
         }
 
         console.log("Fetching balance...");
-        const accountInfoResponse = await fetch(apiUrl + `/v1/borderless-accounts?profileId=${profileId}`, {
+        const response = await fetch(`${apiUrl}/v3/profiles/${profileId}/balances?types=STANDARD`, {
             headers: { Authorization: `Bearer ${token}` },
         });
-        const accountInfoResponseArray: AccountInfo[] = await accountInfoResponse.json();
-        const accountInfo = accountInfoResponseArray[0];
-        window.localStorage.setItem("accountInfo", JSON.stringify(accountInfo));
+        const balancesResponse: Balance[] = await response.json();
+        window.localStorage.setItem("balances", JSON.stringify(balancesResponse));
         window.localStorage.setItem("balanceFetchTime", new Date().getTime().toString());
 
         if (displayedBalances.length === 0) {
-            const allCurrencies = accountInfo.balances.map((b) => b.currency);
+            const allCurrencies = balancesResponse.map((b) => b.currency);
             window.localStorage.setItem("displayedBalances", JSON.stringify(allCurrencies));
             setDisplayedBalances(allCurrencies);
         }
         console.log("Balance fetched successfully");
-        setAccountInfo(accountInfo);
+        setBalances(balancesResponse);
     }, [apiUrl, displayedBalances, fetchProfileId, token]);
 
     const reuseExistingBalance = useCallback(() => {
-        const existingBalance: AccountInfo = JSON.parse(localStorage.getItem("accountInfo") || "{}");
+        const existingBalance: Balance[] = JSON.parse(localStorage.getItem("balances") || "[]");
         if (Object.keys(existingBalance).length !== 0) {
-            setAccountInfo(existingBalance);
+            setBalances(existingBalance);
         } else {
             console.error("Trying to reuse existing balance failed but can not find any balances.");
         }
@@ -109,8 +108,8 @@ export const BalanceContainer: FunctionComponent = () => {
         [displayedBalances]
     );
 
-    const currencyBalances = accountInfo?.balances
-        .filter((b) => displayedBalances?.includes(b.currency))
+    const currencyBalances = balances
+        .filter((b) => displayedBalances.includes(b.currency))
         .map((b) => <CurrencyBalance currency={b.currency} value={b.amount.value} key={b.currency} />);
 
     return (
@@ -161,7 +160,7 @@ export const BalanceContainer: FunctionComponent = () => {
                     }}
                 >
                     <SettingsModal
-                        balances={accountInfo?.balances || []}
+                        balances={balances}
                         displayedBalances={displayedBalances}
                         onCheckboxToggle={toggleBalanceDisplayed}
                     />
