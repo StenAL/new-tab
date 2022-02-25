@@ -8,8 +8,8 @@ export const CurrencyBalance: FunctionComponent<CurrencyBalanceProps> = ({
     currency,
     value,
 }) => {
-    const getFormattedValueForCurrency = (currency, value) => {
-        const decimalFormattedValue = Number(value).toFixed(2);
+    const getFormattedValueForCurrency = (currency: string, value: number) => {
+        const decimalFormattedValue = value.toFixed(2);
         switch (currency) {
             case "EUR":
                 return decimalFormattedValue + " €";

@@ -1,9 +1,10 @@
 import { FunctionComponent } from "react";
+import { Balance } from "../types";
 
 interface SettingsModalProps {
-    balances: any;
-    displayedBalances: any;
-    onCheckboxToggle: any;
+    balances: Balance[];
+    displayedBalances: string[];
+    onCheckboxToggle: (currency: string) => void;
 }
 export const SettingsModal: FunctionComponent<SettingsModalProps> = ({
     balances,
