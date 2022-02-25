@@ -8,6 +8,20 @@ export interface Amount {
     currency: string;
 }
 
+export interface ProfileDetails {
+    firstName: string;
+    lastName: string;
+}
+
+/**
+ * Returned by TransferWise API
+ */
+export interface Profile {
+    id: number;
+    type: string;
+    details: ProfileDetails;
+}
+
 /**
  * Returned by TransferWise API
  */

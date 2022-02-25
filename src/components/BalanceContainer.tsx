@@ -1,6 +1,6 @@
 import { FunctionComponent, useCallback, useEffect, useState, MouseEvent } from "react";
 import "currency-flags/dist/currency-flags.css";
-import { AccountInfo } from "../types";
+import { AccountInfo, Profile } from "../types";
 import { CurrencyBalance } from "./CurrencyBalance";
 import * as Modal from "react-modal";
 import { SettingsModal } from "./SettingsModal";
@@ -8,45 +8,45 @@ import { SettingsModal } from "./SettingsModal";
 Modal.setAppElement("#root");
 
 export const BalanceContainer: FunctionComponent = () => {
-    const token = process.env.REACT_APP_TRANSFERWISE_API_TOKEN;
+    const [token] = useState(process.env.REACT_APP_TRANSFERWISE_API_TOKEN);
     if (!token) {
         console.error(
             "No TransferWise API token found. Add an .env file or set REACT_APP_TRANSFERWISE_API_TOKEN if it exists"
         );
     }
-    const apiUrl = process.env.REACT_APP_TRANSFERWISE_API_URL || "https://api.transferwise.com";
+    const [apiUrl] = useState(process.env.REACT_APP_TRANSFERWISE_API_URL || "https://api.transferwise.com");
 
-    const [balance, setBalance] = useState<AccountInfo | undefined>();
-    const [modalOpen, setModalOpen] = useState(false);
+    const [accountInfo, setAccountInfo] = useState<AccountInfo | undefined>();
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [displayedBalances, setDisplayedBalances] = useState<string[]>(
-        JSON.parse(window.localStorage.getItem("displayedBalances") || "[]")
+        JSON.parse(localStorage.getItem("displayedBalances") || "[]")
     );
 
     const fetchProfileId = useCallback(async () => {
-        console.log("Fetching TW profile ID...");
-        const profileIdResponse = await fetch(apiUrl + `/v1/profiles`, {
+        console.log("Fetching TransferWise profile ID...");
+        const profileResponse = await fetch(apiUrl + `/v1/profiles`, {
             headers: { Authorization: `Bearer ${token}` },
         });
-        const profileArray = await profileIdResponse.json();
-        const profileId = profileArray[0].id;
-        window.localStorage.setItem("transferwiseProfileId", profileId);
-        console.log(`TW profile ID fetched: ${profileId}`);
+        const profileResponseArray: Profile[] = await profileResponse.json();
+        const profileId = profileResponseArray[0].id;
+        window.localStorage.setItem("transferwiseProfileId", profileId.toString());
+        console.log(`TransferWise profile id fetched: ${profileId}`);
         return profileId;
     }, [apiUrl, token]);
 
     const fetchBalance = useCallback(async () => {
-        let profileId = window.localStorage.getItem("transferwiseProfileId");
+        let profileId = window.localStorage.getItem("transferwiseProfileId") || undefined;
         if (!profileId) {
-            profileId = await fetchProfileId();
+            profileId = (await fetchProfileId()).toString();
         }
 
         console.log("Fetching balance...");
-        const balanceResponse = await fetch(apiUrl + `/v1/borderless-accounts?profileId=${profileId}`, {
+        const accountInfoResponse = await fetch(apiUrl + `/v1/borderless-accounts?profileId=${profileId}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
-        const accountInfoResponse: [AccountInfo] = await balanceResponse.json();
-        const accountInfo = accountInfoResponse[0];
-        window.localStorage.setItem("balance", JSON.stringify(accountInfo));
+        const accountInfoResponseArray: AccountInfo[] = await accountInfoResponse.json();
+        const accountInfo = accountInfoResponseArray[0];
+        window.localStorage.setItem("accountInfo", JSON.stringify(accountInfo));
         window.localStorage.setItem("balanceFetchTime", new Date().getTime().toString());
 
         if (displayedBalances.length === 0) {
@@ -55,17 +55,17 @@ export const BalanceContainer: FunctionComponent = () => {
             setDisplayedBalances(allCurrencies);
         }
         console.log("Balance fetched successfully");
-        setBalance(accountInfo);
+        setAccountInfo(accountInfo);
     }, [apiUrl, displayedBalances, fetchProfileId, token]);
 
-    const reuseExistingBalance = () => {
-        const existingBalance: AccountInfo = JSON.parse(localStorage.getItem("balance") || "{}");
+    const reuseExistingBalance = useCallback(() => {
+        const existingBalance: AccountInfo = JSON.parse(localStorage.getItem("accountInfo") || "{}");
         if (Object.keys(existingBalance).length !== 0) {
-            setBalance(existingBalance);
+            setAccountInfo(existingBalance);
         } else {
-            console.error("Trying to reuse existing balance failed, balance not found.");
+            console.error("Trying to reuse existing balance failed but can not find any balances.");
         }
-    };
+    }, []);
 
     useEffect(() => {
         const fetchAfterTime = new Date().getTime() - 5 * 60 * 1000; // five minutes ago
@@ -77,34 +77,39 @@ export const BalanceContainer: FunctionComponent = () => {
                 reuseExistingBalance();
             });
         } else {
-            // balance has not been initialized yet
             reuseExistingBalance();
         }
-    }, [fetchBalance]);
+    }, [reuseExistingBalance, fetchBalance]);
 
-    const refreshBalance = (event: MouseEvent) => {
-        const target = event.currentTarget;
-        target.classList.add("spin-animation");
-        fetchBalance().catch((e) => {
-            console.log(e);
-            reuseExistingBalance();
-        });
-        setTimeout(() => target.classList.remove("spin-animation"), 1000);
-    };
+    const refreshBalance = useCallback(
+        (event: MouseEvent) => {
+            const target = event.currentTarget;
+            target.classList.add("spin-animation");
+            fetchBalance().catch((e) => {
+                console.log(e);
+                reuseExistingBalance();
+            });
+            setTimeout(() => target.classList.remove("spin-animation"), 1000);
+        },
+        [fetchBalance, reuseExistingBalance]
+    );
 
-    const toggleBalanceDisplayed = (currency: string) => {
-        let newBalances;
-        if (displayedBalances.includes(currency)) {
-            newBalances = displayedBalances.filter((b) => b !== currency);
-        } else {
-            newBalances = displayedBalances.slice();
-            newBalances.push(currency);
-        }
-        localStorage.setItem("displayedBalances", JSON.stringify(newBalances));
-        setDisplayedBalances(newBalances);
-    };
+    const toggleBalanceDisplayed = useCallback(
+        (currency: string) => {
+            let newBalances: string[];
+            if (displayedBalances.includes(currency)) {
+                newBalances = displayedBalances.filter((b) => b !== currency);
+            } else {
+                newBalances = displayedBalances.slice();
+                newBalances.push(currency);
+            }
+            localStorage.setItem("displayedBalances", JSON.stringify(newBalances));
+            setDisplayedBalances(newBalances);
+        },
+        [displayedBalances]
+    );
 
-    const currencyBalances = balance?.balances
+    const currencyBalances = accountInfo?.balances
         .filter((b) => displayedBalances?.includes(b.currency))
         .map((b) => <CurrencyBalance currency={b.currency} value={b.amount.value} key={b.currency} />);
 
@@ -126,7 +131,7 @@ export const BalanceContainer: FunctionComponent = () => {
                             className={"refresh-icon"}
                         />
                     </button>
-                    <button className={"balance-container-button"} onClick={() => setModalOpen(!modalOpen)}>
+                    <button className={"balance-container-button"} onClick={() => setIsModalOpen(!isModalOpen)}>
                         <img
                             src={process.env.PUBLIC_URL + "/settings.png"}
                             alt={"settings"}
@@ -135,10 +140,10 @@ export const BalanceContainer: FunctionComponent = () => {
                     </button>
                 </h2>
                 <Modal
-                    isOpen={modalOpen}
+                    isOpen={isModalOpen}
                     shouldCloseOnOverlayClick={true}
                     shouldCloseOnEsc={true}
-                    onRequestClose={() => setModalOpen(false)}
+                    onRequestClose={() => setIsModalOpen(false)}
                     style={{
                         overlay: {
                             backgroundColor: "rgba(255, 255, 255, 0)",
@@ -156,7 +161,7 @@ export const BalanceContainer: FunctionComponent = () => {
                     }}
                 >
                     <SettingsModal
-                        balances={balance?.balances || []}
+                        balances={accountInfo?.balances || []}
                         displayedBalances={displayedBalances}
                         onCheckboxToggle={toggleBalanceDisplayed}
                     />

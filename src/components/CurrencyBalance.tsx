@@ -1,23 +1,23 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useCallback } from "react";
 
 interface CurrencyBalanceProps {
     currency: string;
     value: number;
 }
 export const CurrencyBalance: FunctionComponent<CurrencyBalanceProps> = ({ currency, value }) => {
-    const getFormattedValueForCurrency = (currency: string, value: number) => {
+    const getFormattedValueForCurrency = useCallback((currency: string, value: number) => {
         const decimalFormattedValue = value.toFixed(2);
         switch (currency) {
             case "EUR":
-                return decimalFormattedValue + " €";
+                return `${decimalFormattedValue} €`;
             case "GBP":
-                return "£" + decimalFormattedValue;
+                return `£${decimalFormattedValue}`;
             case "USD":
-                return "$" + decimalFormattedValue;
+                return `$${decimalFormattedValue}`;
             default:
-                return decimalFormattedValue + " " + currency;
+                return `${decimalFormattedValue} ${currency}`;
         }
-    };
+    }, []);
 
     return (
         <div key={currency} className={"currency-balance"}>

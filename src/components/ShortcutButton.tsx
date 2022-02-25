@@ -15,7 +15,6 @@ export const ShortcutButton: FunctionComponent<ShortcutButtonProps> = ({ name, u
             href={url}
             target={"_self"}
         >
-            {" "}
             <span style={{ display: "none" }}>{name}</span>
         </a>
     );
