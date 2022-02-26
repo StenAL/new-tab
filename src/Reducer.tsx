@@ -1,15 +1,15 @@
 import { createContext, Dispatch, Reducer, useContext } from "react";
-import { AppState } from "./components/BalanceContainer";
+import { AppState } from "./App";
 import { Balance } from "./types";
+import { getFromLocalStorage, LocalStorageKey, setLocalStorage } from "./util/LocalStorageHelper";
 
 export enum ActionType {
     FETCH_DATA = "FETCH_DATA",
+    REUSE_EXISTING_DATA = "REUSE_EXISTING_DATA",
     TOGGLE_BALANCE_VISIBILITY = "TOGGLE_BALANCE_VISIBILITY",
-    TOGGLE_MODAL_OPEN = "TOGGLE_MODAL_OPEN",
-    CLOSE_MODAL = "CLOSE_MODAL",
 }
 
-export type Action = FetchDataAction | ToggleBalanceVisibility | ToggleModalOpenAction | CloseModalAction;
+export type Action = FetchDataAction | ToggleBalanceVisibility | ReuseExistingDataAction;
 
 interface ActionBase {
     type: ActionType;
@@ -20,33 +20,34 @@ interface FetchDataAction extends ActionBase {
     balances: Balance[];
 }
 
+interface ReuseExistingDataAction extends ActionBase {
+    type: ActionType.REUSE_EXISTING_DATA;
+}
+
 interface ToggleBalanceVisibility extends ActionBase {
     type: ActionType.TOGGLE_BALANCE_VISIBILITY;
     currency: string;
 }
 
-interface ToggleModalOpenAction extends ActionBase {
-    type: ActionType.TOGGLE_MODAL_OPEN;
-}
-
-interface CloseModalAction extends ActionBase {
-    type: ActionType.CLOSE_MODAL;
-}
-
-// TODO add saveToLocalStorage helper
 export const reducer: Reducer<AppState, Action> = (state, action) => {
     switch (action.type) {
         case ActionType.FETCH_DATA:
-            localStorage.setItem("balances", JSON.stringify(action.balances));
-            localStorage.setItem("balanceFetchTime", new Date().getTime().toString());
+            setLocalStorage(LocalStorageKey.BALANCES, JSON.stringify(action.balances));
+            setLocalStorage(LocalStorageKey.BALANCE_FETCH_TIME, new Date().getTime().toString());
 
             // initially display all balances
             if (state.displayedBalances.length === 0) {
                 const allCurrencies = action.balances.map((b) => b.currency);
-                localStorage.setItem("displayedBalances", JSON.stringify(allCurrencies));
+                setLocalStorage(LocalStorageKey.DISPLAYED_BALANCES, JSON.stringify(allCurrencies));
                 return { ...state, balances: action.balances, displayedBalances: allCurrencies };
             }
             return { ...state, balances: action.balances };
+        case ActionType.REUSE_EXISTING_DATA:
+            const existingBalance: Balance[] = JSON.parse(getFromLocalStorage(LocalStorageKey.BALANCES, "[]"));
+            if (existingBalance.length === 0) {
+                console.error("Trying to reuse existing balance but can not find any balances.");
+            }
+            return { ...state, balances: existingBalance };
         case ActionType.TOGGLE_BALANCE_VISIBILITY:
             let newBalances: string[];
             if (state.displayedBalances.includes(action.currency)) {
@@ -55,12 +56,8 @@ export const reducer: Reducer<AppState, Action> = (state, action) => {
                 newBalances = state.displayedBalances.slice();
                 newBalances.push(action.currency);
             }
-            localStorage.setItem("displayedBalances", JSON.stringify(newBalances));
+            setLocalStorage(LocalStorageKey.DISPLAYED_BALANCES, JSON.stringify(newBalances));
             return { ...state, displayedBalances: newBalances };
-        case ActionType.TOGGLE_MODAL_OPEN:
-            return { ...state, isModalOpen: !state.isModalOpen };
-        case ActionType.CLOSE_MODAL:
-            return { ...state, isModalOpen: false };
     }
     return state;
 };
