@@ -7,7 +7,7 @@ export const ShortcutsContainer: FunctionComponent = () => {
             <div className={"shortcuts-row"}>
                 <ShortcutButton name={"bbc-news"} url={"https://www.bbc.co.uk/news"} />
                 <ShortcutButton name={"bloomberg"} url={"https://www.bloomberg.com/europe"} />
-                <ShortcutButton name={"err"} url={"https://www.errs.ee/"} />
+                <ShortcutButton name={"err"} url={"https://www.err.ee/"} />
                 <ShortcutButton name={"github"} url={"https://github.com/"} />
                 <ShortcutButton name={"hckr-news"} url={"https://hckrnews.com/"} />
             </div>
