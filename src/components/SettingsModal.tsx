@@ -11,8 +11,11 @@ export const SettingsModal: FunctionComponent<SettingsModalProps> = ({ balances,
     const dispatch = useDispatchContext();
     const balanceFilters = useMemo(
         () =>
-            balances.map((b) => (
-                <div key={b.currency} className={"currency-filter"}>
+            balances.map((b, i) => (
+                <div
+                    key={b.currency}
+                    className={`currency-filter ${i === balances.length - 1 ? "last-currency-filter" : ""}`}
+                >
                     <div>
                         <div className={`currency-flag settings-flag currency-flag-${b.currency.toLowerCase()}`} />
                         <span className={"filter-text"}>{b.currency}</span>

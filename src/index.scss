@@ -70,6 +70,7 @@ body {
         font-size: 16px;
         margin-left: 5vh;
         margin-bottom: 5vh;
+        min-height: 15vh;
 
         .balance-flag {
             height: 22px !important;
@@ -139,6 +140,22 @@ body {
     }
 }
 
+.modal-content {
+    position: fixed;
+    bottom: 20vh;
+    left: 16vw;
+    min-width: 160px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 15px;
+}
+
+.modal-overlay {
+    background-color: rgba(255, 255, 255, 0);
+    position: fixed;
+    inset: 0;
+}
+
 .currency-filter {
     display: flex;
     flex-direction: row;
@@ -146,12 +163,12 @@ body {
     text-align: left;
     font-size: 16px;
     padding-bottom: 5px;
-    border-bottom: 1px solid dimgrey;
+    border-bottom: 2px solid #a8a8a8;
 
     div {
         .settings-flag {
-            height: 28px !important;
-            width: 42px !important;
+            height: 24px !important;
+            width: 36px !important;
             margin-right: 6px;
             position: relative;
             top: 6px;
@@ -171,6 +188,10 @@ body {
         position: relative;
         top: 4px;
     }
+}
+
+.last-currency-filter {
+    border-bottom: none !important;
 }
 
 .settings-title {

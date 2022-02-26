@@ -6,8 +6,6 @@ import { useApiContext } from "../util/ApiHelper";
 import { CurrencyBalance } from "./CurrencyBalance";
 import { SettingsModal } from "./SettingsModal";
 
-Modal.setAppElement("#root");
-
 interface BalanceContainerProps {
     balances: Balance[];
     displayedBalances: string[];
@@ -72,21 +70,8 @@ export const BalanceContainer: FunctionComponent<BalanceContainerProps> = ({ bal
                     shouldCloseOnOverlayClick={true}
                     shouldCloseOnEsc={true}
                     onRequestClose={() => setIsModalOpen(false)}
-                    style={{
-                        overlay: {
-                            backgroundColor: "rgba(255, 255, 255, 0)",
-                        },
-                        content: {
-                            position: "fixed",
-                            top: "49vh",
-                            left: "16vw",
-                            right: "73vw",
-                            bottom: "20vh",
-                            borderRadius: "5px",
-                            backgroundColor: "rgba(255, 255, 255, 0.7)",
-                            padding: "20px",
-                        },
-                    }}
+                    className={"modal-content"}
+                    overlayClassName={"modal-overlay"}
                 >
                     <SettingsModal balances={balances} displayedBalances={displayedBalances} />
                 </Modal>
