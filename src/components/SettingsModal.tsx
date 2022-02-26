@@ -1,16 +1,14 @@
 import { FunctionComponent, useMemo } from "react";
+import { ActionType, useDispatchContext } from "../Reducer";
 import { Balance } from "../types";
 
 interface SettingsModalProps {
     balances: Balance[];
     displayedBalances: string[];
-    onCheckboxToggle: (currency: string) => void;
 }
-export const SettingsModal: FunctionComponent<SettingsModalProps> = ({
-    balances,
-    displayedBalances,
-    onCheckboxToggle,
-}) => {
+
+export const SettingsModal: FunctionComponent<SettingsModalProps> = ({ balances, displayedBalances }) => {
+    const dispatch = useDispatchContext();
     const balanceFilters = useMemo(
         () =>
             balances.map((b) => (
@@ -21,12 +19,12 @@ export const SettingsModal: FunctionComponent<SettingsModalProps> = ({
                     </div>
                     <input
                         type={"checkbox"}
-                        onChange={() => onCheckboxToggle(b.currency)}
+                        onChange={() => dispatch({ type: ActionType.TOGGLE_BALANCE_VISIBILITY, currency: b.currency })}
                         checked={displayedBalances.includes(b.currency)}
                     />
                 </div>
             )),
-        [balances, displayedBalances, onCheckboxToggle]
+        [balances, dispatch, displayedBalances]
     );
 
     return (
