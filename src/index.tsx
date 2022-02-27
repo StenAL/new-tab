@@ -1,7 +1,9 @@
 import { StrictMode } from "react";
 import { render } from "react-dom";
-import "./index.scss";
 import { App } from "./App";
+
+import "./index.scss";
+import "currency-flags/dist/currency-flags.css";
 
 render(
     <StrictMode>

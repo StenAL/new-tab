@@ -1,4 +1,3 @@
-import "currency-flags/dist/currency-flags.css";
 import { FunctionComponent, useEffect, useReducer, useState } from "react";
 import { BalanceContainer } from "./components/BalanceContainer";
 import { ShortcutsContainer } from "./components/ShortcutsContainer";
