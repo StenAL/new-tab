@@ -5,16 +5,20 @@ export enum LocalStorageKey {
     DISPLAYED_BALANCES = "displayedBalances",
 }
 
-export const getFromLocalStorage = (key: LocalStorageKey, defaultValue: string | (() => string) = ""): string => {
+export function getFromLocalStorage(key: LocalStorageKey): string | undefined;
+export function getFromLocalStorage(key: LocalStorageKey, defaultValue: string): string;
+export function getFromLocalStorage(key: LocalStorageKey, defaultValue?: string): string | undefined {
     let value = localStorage.getItem(key);
-    if (value === null) {
-        if (typeof defaultValue === "string") {
-            return defaultValue;
-        }
-        return defaultValue();
+    if (value) {
+        return value;
     }
-    return value;
-};
+
+    if (typeof defaultValue === "string") {
+        return defaultValue;
+    }
+
+    return undefined;
+}
 
 export const setLocalStorage = (key: LocalStorageKey, value: string) => {
     localStorage.setItem(key, value);
