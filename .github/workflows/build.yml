@@ -1,4 +1,4 @@
-name: Build
+name: Build and Publish
 
 on:
   push:
@@ -31,3 +31,47 @@ jobs:
 
       - name: compile TypeScript
         run: npm run compile
+
+      - name: create optimized bundle
+        if: github.ref == 'refs/heads/main'
+        run: npm run build
+        env:
+          REACT_APP_TRANSFERWISE_API_TOKEN: "TOKEN-GOES-HERE"
+
+      - name: create archives from bundle
+        if: github.ref == 'refs/heads/main'
+        run: tar -cvzf new-tab.tar.gz build && zip -r new-tab.zip build
+
+      - name: create artifact from archives
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: |
+            new-tab.tar.gz
+            new-tab.zip
+  publish:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # needed to tag releases
+    steps:
+      - name: Generate release tag
+        # https://github.com/softprops/action-gh-release/issues/20#issuecomment-985988391
+        id: tag
+        run: echo "::set-output name=release_tag::$(date +"%Y.%m.%d_%H-%M")"
+
+      - name: download server artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: release
+
+      - name: create GitHub release
+        uses:  softprops/action-gh-release@v0.1.14
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: |
+            new-tab.tar.gz
+            new-tab.zip
+          fail_on_unmatched_files: true
