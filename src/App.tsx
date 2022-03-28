@@ -27,7 +27,7 @@ export const App: FunctionComponent = () => {
     useEffect(() => {
         const fetchInitialData = async () => {
             const fetchAfterTime = new Date().getTime() - 5 * 60 * 1000; // five minutes ago
-            const balanceFetchTime = Number(getFromLocalStorage(LocalStorageKey.BALANCE_FETCH_TIME));
+            const balanceFetchTime = Number(getFromLocalStorage(LocalStorageKey.BALANCE_FETCH_TIME, "0"));
 
             if (balanceFetchTime === 0 || fetchAfterTime > balanceFetchTime) {
                 try {
