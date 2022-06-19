@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
-        "target": "es2018",
-        "lib": ["dom", "ES2020"],
+        "noEmit": true, // emitting the bundle is handled by react-scripts
+        "target": "ES2021",
+        "module": "ES2022",
+        "lib": ["ES2021","dom"],
         "strict": true,
         "forceConsistentCasingInFileNames": true,
-        "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noEmit": true,
         "jsx": "react-jsx"
     },
     "include": ["src"]
